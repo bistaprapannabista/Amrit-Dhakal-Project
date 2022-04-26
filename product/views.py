@@ -31,9 +31,16 @@ def product(request, category_slug, product_slug):
 
             return redirect('product:product', category_slug=category_slug, product_slug=product_slug)   
 
-        Comment.objects.create(user=request.user,product=Product.objects.get(id=request.POST.get("id")),text=request.POST.get("comment")).save()
-        messages.success(request,"Comment posted successfully.")
-    
+        if request.POST.get('comment'):
+            Comment.objects.create(user=request.user,product=Product.objects.get(id=request.POST.get("id")),text=request.POST.get("comment")).save()
+            messages.success(request,"Comment posted successfully.")
+
+        if request.POST.get('sold_option'):
+            if request.POST.get('sold_option') == "yes":
+                product.is_sold = 1
+            else: 
+                product.is_sold = 0
+            product.save()    
     else:
         form = AddToCartForm()
 

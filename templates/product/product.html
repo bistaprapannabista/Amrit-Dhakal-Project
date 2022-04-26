@@ -28,11 +28,17 @@
     <form method="post" action="">
         {% csrf_token %}
     {% if user.username == product.vendor.created_by.username %}
-    <button name="sold" class="button is-primary">Sold Out</button>
+    <label for="sold_option">Sold Out:</label>
+        <select name="sold_option" id="sold_option">
+          <option>Choose</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select> 
+        <button>Submit</button>
     {% endif %}
     </form>
 
-    {% if product.is_sold %}
+    {% if product.is_sold == 1 %}
         <button class="button is-danger is-uppercase">Already Sold</button>
     {% else %}
     <form method="post" action="">
