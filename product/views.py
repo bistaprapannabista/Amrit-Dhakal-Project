@@ -8,6 +8,7 @@ from django.db.models import Q
 
 from .forms import AddToCartForm
 from cart.cart import Cart
+from .models import Comment
 
 
 # Create your views here.
@@ -19,6 +20,7 @@ def product(request, category_slug, product_slug):
 
     # Check whether the AddToCart button is clicked or not
     if request.method == 'POST':
+        print(request.POST.get('comment'))
         form = AddToCartForm(request.POST)
 
         if form.is_valid():
@@ -37,6 +39,8 @@ def product(request, category_slug, product_slug):
     # If more than 4 similar products, then get 4 random products 
     if len(similar_products) >= 4:
         similar_products = random.sample(similar_products, 4)
+
+    comments = Comment.objects.filter(product=product)
     
     context = {
         'product': product,
@@ -55,5 +59,4 @@ def category(request, category_slug):
 def search(request):
     query = request.GET.get('query', '') # second is default parameter which is empty
     products = Product.objects.filter(Q(title__icontains=query) | Q(description__icontains=query))
-
     return render(request, 'product/search.html', {'products':products, 'query': query})
