@@ -9,7 +9,6 @@
             <img src="{{product.image.url}}" alt="{{product.title}}">
         </figure>
     {% endif %}
-
     <h1 class="title">{{product.title}}, Rs.{{product.price}}</h1>
 
     <p class="mb-6">
@@ -26,7 +25,16 @@
         {% endfor %}
     {% endif %}
 
+    <form method="post" action="">
+        {% csrf_token %}
+    {% if user.username == product.vendor.created_by.username %}
+    <button name="sold" class="button is-primary">Sold Out</button>
+    {% endif %}
+    </form>
 
+    {% if product.is_sold %}
+        <button class="button is-danger is-uppercase">Already Sold</button>
+    {% else %}
     <form method="post" action="">
         {% csrf_token %}
 
@@ -35,17 +43,26 @@
                 <input type="number" name="quantity" value="1" class="input" min="1" id="">
             </div>
 
-            <div class="control">
+            <div class="control">  
                 <button class="button is-dark is-uppercase">Add to Cart</button>
             </div>
         </div>
     </form>
+    {% endif %}
 
-    <form method="post" action="#">
+
+    <form method="post" action="">
         {% csrf_token %}
-        <textarea name="comment"></textarea>
+        <input type="hidden" name="id" value="{{product.id}}"/>
+        <textarea name="comment" required></textarea>
         <button>Submit</button>
     </form>
+
+    {%for comment in comments%}
+    <ul>
+    {{comment.user.first_name}} {{comment.user.last_name}} - {{comment.text}}
+    </ul>
+    {% endfor %}
 
 
     {% if similar_products %}

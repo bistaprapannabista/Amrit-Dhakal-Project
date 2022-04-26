@@ -32,7 +32,7 @@ class Product(models.Model):
     added_date = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='uploads/', blank=True, null=True)
     thumbnail = models.ImageField(upload_to='uploads/', blank=True, null=True) # Change uploads to thumbnails 
-
+    is_sold = models.BooleanField(default=False)
     class Meta:
         ordering = ['-added_date']
 

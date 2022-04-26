@@ -20,7 +20,7 @@ def product(request, category_slug, product_slug):
 
     # Check whether the AddToCart button is clicked or not
     if request.method == 'POST':
-        print(request.POST.get('comment'))
+        
         form = AddToCartForm(request.POST)
 
         if form.is_valid():
@@ -29,7 +29,10 @@ def product(request, category_slug, product_slug):
 
             messages.success(request, "The product was added to the cart.")
 
-            return redirect('product:product', category_slug=category_slug, product_slug=product_slug)            
+            return redirect('product:product', category_slug=category_slug, product_slug=product_slug)   
+
+        Comment.objects.create(user=request.user,product=Product.objects.get(id=request.POST.get("id")),text=request.POST.get("comment")).save()
+        messages.success(request,"Comment posted successfully.")
     
     else:
         form = AddToCartForm()
@@ -46,6 +49,7 @@ def product(request, category_slug, product_slug):
         'product': product,
         'similar_products': similar_products,
         'form': form,
+        'comments':comments
     }
 
     return render(request, 'product/product.html', context)
