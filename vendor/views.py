@@ -1,10 +1,11 @@
+from email.mime import image
 import django
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .models import Vendor,Profile
+from .models import Vendor
 from product.models import Product
 from .forms import ProductForm,ProfileForm
 from django.contrib.auth import authenticate
@@ -37,7 +38,6 @@ def vendors(request):
 def become_vendor(request):
     if request.method == 'POST':
         form = ProfileForm(request.POST)
-
         if form.is_valid():
             first_name = request.POST.get('first_name')
             last_name = request.POST.get('last_name')
@@ -47,6 +47,7 @@ def become_vendor(request):
             confirm_password = request.POST.get('confirm_password')
             phone_number = request.POST.get('phone_number')
             date_of_birth = request.POST.get('date_of_birth')
+            image = request.FILES.get('image')
 
             user = User.objects.filter(username=username)
   
@@ -60,9 +61,8 @@ def become_vendor(request):
                 user.last_name = last_name
                 user.save()
 
-                Profile.objects.create(user=user,phone_number=phone_number,date_of_birth=date_of_birth)
+                Vendor.objects.create(name=user.username,user=user,phone_number=phone_number,date_of_birth=date_of_birth,image=image).save()
                 login(request, user)
-                vendor = Vendor.objects.create(name=user.username, created_by=user)
 
                 return redirect('core:home')
             
@@ -70,7 +70,8 @@ def become_vendor(request):
                 messages.info(request, 'Account already exists with this username. Please use another username.')
 
     else:
-        form = ProfileForm()   
+        form = ProfileForm()  
+        print(form)
         return render(request, 'vendor/become_vendor.html', {'form': form})
 
     return render(request, 'vendor/become_vendor.html', {'form': form})

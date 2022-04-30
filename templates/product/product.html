@@ -14,8 +14,25 @@
     <p class="mb-6">
         <span class="tag is-dark">{{ product.vendor.name }}</span>
     </p>
+    <span class="avatar"><img src="{{product.vendor.image.url}}"></span>
 
     <p>{{product.description}}</p>
+
+    {% if user.username == product.vendor.user.username %}
+    <form method="post" action="/product/delete/{{product.id}}/">
+        {% csrf_token %}
+        <input type="hidden" value="{{product.id}}" name="product_id">
+        <button style="font-size:24px;color:red;"><i class="fa fa-trash-o"></i></button>
+    </form>
+    {% endif %}
+
+    {% if user.username == product.vendor.user.username %}
+    <form method="post" action="/product/edit/{{product.id}}/">
+        {% csrf_token %}
+        <input type="hidden" value="{{product.id}}" name="product_id">
+        <button style="font-size:24px;color:red;"><i class="fa fa-edit"></i></button>
+    </form>
+    {% endif %}
 
     <hr>
 
@@ -27,7 +44,7 @@
 
     <form method="post" action="">
         {% csrf_token %}
-    {% if user.username == product.vendor.created_by.username %}
+    {% if user.username == product.vendor.user.username %}
     <label for="sold_option">Sold Out:</label>
         <select name="sold_option" id="sold_option">
           <option>Choose</option>
@@ -39,9 +56,9 @@
     </form>
 
     {% if product.is_sold == 1 %}
-        <button class="button is-danger is-uppercase">Already Sold</button>
+        <button class="btn btn-danger">Already Sold</button>
     {% else %}
-    <form method="post" action="">
+    {% comment %} <form method="post" action="">
         {% csrf_token %}
 
         <div class="field has-addons">
@@ -53,7 +70,10 @@
                 <button class="button is-dark is-uppercase">Add to Cart</button>
             </div>
         </div>
-    </form>
+    </form> {% endcomment %}
+    <h4>Contact Us</h4>
+    <p>Email: {{product.vendor.user.email}}</p>
+    <p>Phone: {{product.vendor.phone_number}}</p>
     {% endif %}
 
 

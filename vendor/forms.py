@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import ModelForm
+from django.forms import ImageField, ModelForm
 from django import forms
 from product.models import Product
 
@@ -21,3 +21,4 @@ class ProfileForm(forms.Form):
     confirm_password = forms.CharField(widget=forms.PasswordInput())
     phone_number = forms.CharField(max_length=50)
     date_of_birth = forms.DateField(widget = DateInput)
+    image = forms.ImageField()

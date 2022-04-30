@@ -1,6 +1,10 @@
 import random # To get random products from the database
 from django.contrib import messages
+from django.http import HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
+from requests import RequestException
+
+from vendor.forms import ProductForm
 
 from .models import Category, Product
 
@@ -9,7 +13,6 @@ from django.db.models import Q
 from .forms import AddToCartForm
 from cart.cart import Cart
 from .models import Comment
-
 
 # Create your views here.
 def product(request, category_slug, product_slug):
@@ -40,7 +43,7 @@ def product(request, category_slug, product_slug):
                 product.is_sold = 1
             else: 
                 product.is_sold = 0
-            product.save()    
+            product.save()   
     else:
         form = AddToCartForm()
 
@@ -60,6 +63,33 @@ def product(request, category_slug, product_slug):
     }
 
     return render(request, 'product/product.html', context)
+
+def delete_product(request,product_id):
+    if request.method == "POST":
+        Product.objects.get(id=product_id).delete()
+        messages.success(request,"Your item is deleted successfully.")
+    return redirect("/")
+
+def edit_product(request,product_id):
+    context={}
+    if request.method=="POST":
+        product = Product.objects.get(id=product_id)
+        product.category = Category.objects.get(title=request.POST.get('category'))
+        if request.FILES.get('image')!=None:
+            product.image = request.FILES.get('image')
+            product.thumbnail = product.image
+        product.title = request.POST.get('title')
+        product.description = request.POST.get('description')
+        product.price = request.POST.get('price')
+        product.save()
+        messages.success(request,"Your product is edit successfully.")
+        return redirect('/')
+
+    product=Product.objects.get(id=product_id)
+    categories = Category.objects.filter()
+    context['product']=product
+    context['categories']=categories
+    return render(request,'vendor/edit_product.html',context)
 
 
 def category(request, category_slug):

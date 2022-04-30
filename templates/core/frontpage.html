@@ -3,6 +3,12 @@
 {% block title %}Home Page{% endblock title %}
 
 {% block content %}
+{% if messages %}
+{% for message in messages %}
+    <div class="notification is-success is-toast">{{ message }}</div>
+{% endfor %}
+{% endif %}
+
     <div class="columns is-multiline mb-6">
         <div class="column is-12 has-test-centered mt-6 mb-6">
             <h2 class="is-size-3">Latest Products</h2>
