@@ -107,8 +107,8 @@ def add_product(request):
             product.vendor = request.user.vendor
             product.slug = slugify(product.title)
             product.save() #finally save
-
-            return redirect('vendor:vendor-admin')
+            messages.success(request,"Product added successfully.")
+            return redirect('/')
 
     else:
         form = ProductForm

@@ -21,4 +21,4 @@ class ProfileForm(forms.Form):
     confirm_password = forms.CharField(widget=forms.PasswordInput())
     phone_number = forms.CharField(max_length=50)
     date_of_birth = forms.DateField(widget = DateInput)
-    image = forms.ImageField()
+    image = forms.ImageField(required=False)

@@ -19,19 +19,14 @@
     <p>{{product.description}}</p>
 
     {% if user.username == product.vendor.user.username %}
-    <form method="post" action="/product/delete/{{product.id}}/">
-        {% csrf_token %}
         <input type="hidden" value="{{product.id}}" name="product_id">
-        <button style="font-size:24px;color:red;"><i class="fa fa-trash-o"></i></button>
-    </form>
+        <a href="/product/delete/{{product.id}}" style="font-size:24px;color:red;"><i class="fa fa-trash-o"></i></a>
     {% endif %}
 
     {% if user.username == product.vendor.user.username %}
-    <form method="post" action="/product/edit/{{product.id}}/">
-        {% csrf_token %}
+
         <input type="hidden" value="{{product.id}}" name="product_id">
-        <button style="font-size:24px;color:red;"><i class="fa fa-edit"></i></button>
-    </form>
+        <a role="button" style="font-size:24px;color:red;" href="/product/edit/{{product.id}}/"><i class="fa fa-edit"></i></a>
     {% endif %}
 
     <hr>

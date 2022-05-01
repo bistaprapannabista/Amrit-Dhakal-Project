@@ -132,11 +132,13 @@
             {% endif %}
 
              <!-- Button trigger modal -->
+            {% if user.username == product.vendor.user.username %}
       <div class="navbar-item">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
           <i class="fa fa-bell"></i>
         </button>
         </div>
+        {% endif %}
         
 
           </div>
@@ -154,9 +156,11 @@
                       </button>
                     </div>
                     <div class="modal-body">
+                      {% if user.username == product.vendor.user.username %}
                       {%for comment in comments%}
-                      <li>{{comment.user}} - <i>{{comment}}</i> on <code>{{comment.timestamp}}</code></li>
+                      <li>{{comment.user}} - <i>{{comment.text}}</i> on <code>{{comment.timestamp}}</code></li>
                       {% endfor %}
+                      {% endif %}
                     </div>
                   </div>
                 </div>

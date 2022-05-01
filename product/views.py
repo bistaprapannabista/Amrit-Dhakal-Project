@@ -65,9 +65,8 @@ def product(request, category_slug, product_slug):
     return render(request, 'product/product.html', context)
 
 def delete_product(request,product_id):
-    if request.method == "POST":
-        Product.objects.get(id=product_id).delete()
-        messages.success(request,"Your item is deleted successfully.")
+    Product.objects.get(id=product_id).delete()
+    messages.success(request,"Your item is deleted successfully.")
     return redirect("/")
 
 def edit_product(request,product_id):
